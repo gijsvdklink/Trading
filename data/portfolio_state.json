@@ -1,0 +1,341 @@
+{
+  "positions": {
+    "DDOG": {
+      "ticker": "DDOG",
+      "notional": 15.0,
+      "entry_price": 222.1999969482422,
+      "stop_price": 211.08999710083006,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09"
+    },
+    "VLO": {
+      "ticker": "VLO",
+      "notional": 15.0,
+      "entry_price": 247.0,
+      "stop_price": 234.64999999999998,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09"
+    },
+    "TQQQ": {
+      "ticker": "TQQQ",
+      "notional": 6.0,
+      "entry_price": 68.98999786376953,
+      "stop_price": 65.54049797058106,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09"
+    },
+    "TECL": {
+      "ticker": "TECL",
+      "notional": 6.0,
+      "entry_price": 183.34750366210938,
+      "stop_price": 174.1801284790039,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09"
+    },
+    "TAN": {
+      "ticker": "TAN",
+      "notional": 4.5,
+      "entry_price": 60.4900016784668,
+      "stop_price": 57.465501594543454,
+      "tier": "etfs",
+      "buy_date": "2026-06-09"
+    },
+    "QCLN": {
+      "ticker": "QCLN",
+      "notional": 4.5,
+      "entry_price": 58.16999816894531,
+      "stop_price": 55.261498260498044,
+      "tier": "etfs",
+      "buy_date": "2026-06-09"
+    },
+    "LTC-USD": {
+      "ticker": "LTC-USD",
+      "notional": 4.5,
+      "entry_price": 42.099998474121094,
+      "stop_price": 39.99499855041504,
+      "tier": "crypto",
+      "buy_date": "2026-06-09"
+    },
+    "DOGE-USD": {
+      "ticker": "DOGE-USD",
+      "notional": 4.5,
+      "entry_price": 0.08438999950885773,
+      "stop_price": 0.08017049953341483,
+      "tier": "crypto",
+      "buy_date": "2026-06-09"
+    }
+  },
+  "trade_history": [
+    {
+      "ticker": "ADI",
+      "notional": 12.0,
+      "entry_price": 391.2049865722656,
+      "stop_price": 371.64473724365234,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "DDOG",
+      "notional": 12.0,
+      "entry_price": 223.3498992919922,
+      "stop_price": 212.18240432739256,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "FDX",
+      "notional": 12.0,
+      "entry_price": 327.5,
+      "stop_price": 311.125,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "TECL",
+      "notional": 4.0,
+      "entry_price": 186.40570068359375,
+      "stop_price": 177.08541564941405,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "RKLB",
+      "notional": 4.0,
+      "entry_price": 103.94999694824219,
+      "stop_price": 98.75249710083007,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "NVDA",
+      "notional": 4.0,
+      "entry_price": 202.0050048828125,
+      "stop_price": 191.90475463867188,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "TAN",
+      "notional": 4.0,
+      "entry_price": 60.49980163574219,
+      "stop_price": 57.47481155395508,
+      "tier": "etfs",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "SOXX",
+      "notional": 4.0,
+      "entry_price": 537.1199951171875,
+      "stop_price": 510.2639953613281,
+      "tier": "etfs",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "ICLN",
+      "notional": 4.0,
+      "entry_price": 20.290000915527344,
+      "stop_price": 19.275500869750974,
+      "tier": "etfs",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "ADI",
+      "notional": 12.0,
+      "entry_price": 390.6300048828125,
+      "stop_price": 371.09850463867184,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "FDX",
+      "notional": 12.0,
+      "entry_price": 327.625,
+      "stop_price": 311.24375,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "ADM",
+      "notional": 12.0,
+      "entry_price": 79.48500061035156,
+      "stop_price": 75.51075057983398,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "TECL",
+      "notional": 4.0,
+      "entry_price": 186.97000122070312,
+      "stop_price": 177.62150115966796,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "RKLB",
+      "notional": 4.0,
+      "entry_price": 103.8550033569336,
+      "stop_price": 98.66225318908691,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "NVDA",
+      "notional": 4.0,
+      "entry_price": 201.88999938964844,
+      "stop_price": 191.795499420166,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "TAN",
+      "notional": 4.0,
+      "entry_price": 60.55500030517578,
+      "stop_price": 57.52725028991699,
+      "tier": "etfs",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "SOXX",
+      "notional": 4.0,
+      "entry_price": 536.4500122070312,
+      "stop_price": 509.62751159667965,
+      "tier": "etfs",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "ICLN",
+      "notional": 4.0,
+      "entry_price": 20.290000915527344,
+      "stop_price": 19.275500869750974,
+      "tier": "etfs",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "DDOG",
+      "notional": 12.0,
+      "entry_price": 223.31500244140625,
+      "stop_price": 212.14925231933591,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "DDOG",
+      "notional": 15.0,
+      "entry_price": 222.91000366210938,
+      "stop_price": 211.7645034790039,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "FDX",
+      "notional": 15.0,
+      "entry_price": 327.4949951171875,
+      "stop_price": 311.1202453613281,
+      "tier": "medium_risk_sp500",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "TECL",
+      "notional": 6.0,
+      "entry_price": 184.60499572753906,
+      "stop_price": 175.3747459411621,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "NVDA",
+      "notional": 6.0,
+      "entry_price": 201.5749969482422,
+      "stop_price": 191.49624710083006,
+      "tier": "high_risk",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "TAN",
+      "notional": 4.5,
+      "entry_price": 60.6150016784668,
+      "stop_price": 57.58425159454345,
+      "tier": "etfs",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "SOXX",
+      "notional": 4.5,
+      "entry_price": 534.3099975585938,
+      "stop_price": 507.59449768066406,
+      "tier": "etfs",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "LTC-USD",
+      "notional": 4.5,
+      "entry_price": 42.099998474121094,
+      "stop_price": 39.99499855041504,
+      "tier": "crypto",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    },
+    {
+      "ticker": "DOGE-USD",
+      "notional": 4.5,
+      "entry_price": 0.08438999950885773,
+      "stop_price": 0.08017049953341483,
+      "tier": "crypto",
+      "buy_date": "2026-06-09",
+      "sell_date": "2026-06-09",
+      "reason": "rebalance"
+    }
+  ],
+  "last_rebalance": "2026-06-09"
+}

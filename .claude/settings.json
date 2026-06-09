@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(pip3 install *)",
+      "Read(//opt/homebrew/**)",
+      "Bash(conda --version)",
+      "Bash(python3.11 --version)",
+      "Bash(python3.11 -m pip install -q yfinance pandas numpy lightgbm scikit-learn matplotlib seaborn joblib tqdm pyarrow scipy)",
+      "Bash(brew install *)",
+      "Bash(brew list *)",
+      "Read(//usr/local/Cellar/libomp/22.1.7/lib/**)",
+      "Bash(python3 -c \"from alpaca.trading.enums import OrderType; print\\(dir\\(OrderType\\)\\)\")",
+      "Bash(python3 -c \"from alpaca.trading.enums import OrderType; o = OrderType.STOP; print\\(type\\(o\\), str\\(o\\), repr\\(o\\)\\)\")",
+      "WebSearch",
+      "WebFetch(domain:docs.trading212.com)",
+      "WebFetch(domain:t212public-api-docs.redoc.ly)",
+      "WebFetch(domain:pypi.org)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(pip show *)",
+      "Bash(python -c \"import trading212; help\\(trading212\\)\")",
+      "Bash(python -m pip install python-trading212 -q)",
+      "Bash(python -c \"import trading212; import inspect; print\\([m for m in dir\\(trading212.Trading212\\) if not m.startswith\\('_'\\)]\\)\")",
+      "Bash(.venv/bin/python3 -m pip install python-trading212 -q)",
+      "Bash(.venv/bin/python3 -c \"from trading212 import Trading212; import inspect; methods = [m for m in dir\\(Trading212\\) if not m.startswith\\('_'\\)]; print\\('\\\\n'.join\\(methods\\)\\)\")",
+      "Bash(uv add *)",
+      "Bash(gh api *)",
+      "Bash(.venv/bin/python3 daily_signals.py --budget 100 --top-n 3)",
+      "Bash(git init *)",
+      "Bash(git remote *)"
+    ]
+  }
+}
