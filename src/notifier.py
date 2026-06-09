@@ -27,10 +27,24 @@ def _send(subject: str, html_body: str) -> bool:
     msg["To"]      = recipient
     msg.attach(MIMEText(html_body, "html"))
 
+    # Pick SMTP server based on sender domain
+    domain = sender.split("@")[-1].lower()
+    if domain in ("outlook.com", "hotmail.com", "live.com", "msn.com"):
+        smtp_host, smtp_port, use_ssl = "smtp.office365.com", 587, False
+    else:
+        smtp_host, smtp_port, use_ssl = "smtp.gmail.com", 465, True
+
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(sender, password)
-            server.sendmail(sender, recipient, msg.as_string())
+        if use_ssl:
+            with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
+                server.login(sender, password)
+                server.sendmail(sender, recipient, msg.as_string())
+        else:
+            with smtplib.SMTP(smtp_host, smtp_port) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(sender, password)
+                server.sendmail(sender, recipient, msg.as_string())
         print(f"  Email sent to {recipient}")
         return True
     except Exception as e:
