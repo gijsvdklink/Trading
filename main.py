@@ -1,46 +1,65 @@
 """
-Run this every week to retrain and get fresh stock picks.
+python main.py
 
-    python main.py
+Retrains the model on the latest data and prints exactly
+what to buy this week on Revolut with a €100 budget.
 """
 
 import warnings
-import time
 warnings.filterwarnings("ignore")
 
-from pathlib import Path
-from datetime import date
-
-import yfinance as yf
-import pandas as pd
-import numpy as np
+from datetime import date, timedelta
 from dotenv import load_dotenv
-
 load_dotenv()
+
+BUDGET       = 100.0
+STOP_LOSS    = 0.05   # 5%
+HORIZON_DAYS = 7
+
+
+def _sell_date() -> str:
+    d, count = date.today(), 0
+    while count < HORIZON_DAYS:
+        d += timedelta(days=1)
+        if d.weekday() < 5:
+            count += 1
+    return d.strftime("%A %d %b")
 
 
 def main():
-    print(f"\n{'='*58}")
-    print(f"  TRADING SYSTEM — {date.today().strftime('%A %d %b %Y')}")
-    print(f"{'='*58}\n")
+    import yfinance as yf
+    import pandas as pd
 
-    # ── Step 1: Market regime ─────────────────────────────────────────────────
-    print("Step 1/4 — Checking market regime...")
+    print("\n" + "═" * 54)
+    print("  📈  WEEKLY STOCK PICKS  —  " + date.today().strftime("%d %b %Y"))
+    print("═" * 54)
+
+    # ── 1. Regime ─────────────────────────────────────────────────────────────
     from src.regime import fetch_regime_data, get_current_regime
     spy, vix = fetch_regime_data(start="2023-01-01")
     regime = get_current_regime(spy, vix)
 
     icons = {"bull": "🟢", "neutral": "🟡", "caution": "🟠", "bear": "🔴"}
     icon  = icons.get(regime["regime"], "⚪")
-    print(f"  {icon}  {regime['regime'].upper()}  |  VIX: {regime['vix']}  "
-          f"|  SPY vs SMA200: {regime['spy_vs_sma200']:+.1f}%")
-    print(f"  Deploy {regime['scalar']:.0%} of your budget today\n")
+    scalar = regime["scalar"]
 
-    # ── Step 2: Download latest prices ────────────────────────────────────────
-    print("Step 2/4 — Downloading latest price data...")
-    from src.universe import get_universe, REVOLUT_UNAVAILABLE
+    print(f"\n  Market:  {icon} {regime['regime'].upper()}  "
+          f"(VIX {regime['vix']}  |  SPY vs 200d: {regime['spy_vs_sma200']:+.1f}%)")
 
+    if scalar == 0.0:
+        print("  ⚠  BEAR MARKET — stay in cash this week.\n")
+        return
+
+    effective = BUDGET * scalar
+    per_pos   = effective / 5
+    print(f"  Budget:  €{effective:.0f} deployed  "
+          f"(€{BUDGET:.0f} × {scalar:.0%} caution factor)\n")
+
+    # ── 2. Download ───────────────────────────────────────────────────────────
+    from src.universe import get_universe
     tickers = get_universe("all")
+
+    print(f"  Downloading price data...")
     raw = yf.download(tickers, period="400d", auto_adjust=True,
                       progress=False, threads=True)
 
@@ -55,26 +74,21 @@ def main():
         close.loc[:, valid], volume.loc[:, valid],
         high.loc[:, valid],  low.loc[:, valid],
     )
-    print(f"  {len(close.columns)} instruments  ×  {len(close)} trading days\n")
 
-    # ── Step 3: Retrain model on latest data ──────────────────────────────────
-    print("Step 3/4 — Retraining model on most recent data...")
+    # ── 3. Retrain ────────────────────────────────────────────────────────────
+    print(f"  Retraining model on latest data...")
     from src.features import build_feature_matrix
     from src.model import train_final_model
 
-    feature_matrix = build_feature_matrix(
-        close, volume, high, low, target_horizon=7
-    )
-    model, feature_cols = train_final_model(feature_matrix)
-    print()
+    fm = build_feature_matrix(close, volume, high, low, target_horizon=HORIZON_DAYS)
+    model, feature_cols = train_final_model(fm)
 
-    # ── Step 4: Generate top 5 picks ─────────────────────────────────────────
-    print("Step 4/4 — Generating picks for the next 7 days...")
+    # ── 4. Signals ────────────────────────────────────────────────────────────
     from src.signals import generate_risk_tiers
+    from src.universe import REVOLUT_UNAVAILABLE
 
     tier_signals = generate_risk_tiers(
-        close, volume, high, low, model, feature_cols,
-        top_n_per_tier=8,
+        close, volume, high, low, model, feature_cols, top_n_per_tier=8,
     )
     tier_signals.pop("crypto", None)
 
@@ -84,20 +98,18 @@ def main():
         "etfs":              "ETF",
     }
 
-    # Merge all tiers, sort by model score, take top 5 Revolut-available picks
     frames = []
     for tier, df in tier_signals.items():
-        if df.empty:
-            continue
+        if df.empty: continue
         df = df.copy()
         df["tier_label"] = tier_label.get(tier, tier)
         frames.append(df)
 
     if not frames:
-        print("  No signals generated.")
+        print("  No signals generated.\n")
         return
 
-    all_picks = (
+    picks = (
         pd.concat(frames)
         .sort_values("predicted_rank", ascending=False)
         .pipe(lambda d: d[~d["ticker"].isin(REVOLUT_UNAVAILABLE)])
@@ -105,65 +117,39 @@ def main():
         .reset_index(drop=True)
     )
 
-    budget     = 100.0
-    effective  = budget * regime["scalar"]
-    per_pos    = effective / len(all_picks) if len(all_picks) else 0
-    sell_date  = _next_weekday(days=7)
+    # ── 5. Print results ──────────────────────────────────────────────────────
+    sell_on = _sell_date()
 
-    # ── Print results ─────────────────────────────────────────────────────────
-    print(f"\n{'='*58}")
-    print(f"  TOP 5 PICKS FOR THE WEEK  —  sell by {sell_date}")
-    print(f"  Budget: €{effective:.0f} of €{budget:.0f}  "
-          f"(regime scalar {regime['scalar']:.0%})")
-    print(f"{'='*58}")
-    print(f"\n  {'#':<3} {'Ticker':<8} {'Tier':<12} {'Price':>8} "
-          f"{'Buy €':>6} {'Stop':>8} {'RSI':>5} {'5d%':>6}")
-    print(f"  {'─'*56}")
+    print(f"\n{'═' * 54}")
+    print(f"  BUY THESE 5 STOCKS ON REVOLUT NOW")
+    print(f"  Sell on: {sell_on}  |  Stop-loss: {STOP_LOSS:.0%} below entry")
+    print(f"{'═' * 54}\n")
+    print(f"  {'#':<3} {'Ticker':<7} {'Tier':<12} {'Price':>8} "
+          f"{'Invest':>8} {'Stop-loss':>10}")
+    print(f"  {'─' * 52}")
 
-    for i, row in all_picks.iterrows():
-        price     = float(row["price"])
-        stop      = price * 0.95
-        rsi       = row.get("rsi_14", float("nan"))
-        ret5      = row.get("ret_5d", float("nan"))
-        rsi_str   = f"{rsi:.0f}"   if rsi == rsi   else "—"
-        ret5_str  = f"{ret5*100:+.1f}%" if ret5 == ret5 else "—"
-        print(f"  {i+1:<3} {row['ticker']:<8} {row['tier_label']:<12} "
-              f"{price:>8.2f} {per_pos:>6.0f} {stop:>8.2f} "
-              f"{rsi_str:>5} {ret5_str:>6}")
-
-    print(f"\n{'='*58}")
-    print(f"  HOW TO TRADE THIS ON REVOLUT")
-    print(f"{'='*58}")
-    for i, row in all_picks.iterrows():
+    for i, row in picks.iterrows():
         price = float(row["price"])
-        stop  = price * 0.95
-        print(f"  {i+1}. Buy {row['ticker']:<6}  →  €{per_pos:.0f}  "
-              f"  set stop-loss at ${stop:.2f}")
-    print(f"\n  Sell everything on or after {sell_date}.")
-    print(f"  Set stop-losses immediately — never skip this step.\n")
+        stop  = price * (1 - STOP_LOSS)
+        print(f"  {i+1:<3} {row['ticker']:<7} {row['tier_label']:<12} "
+              f"${price:>7.2f}  €{per_pos:>5.0f}    ${stop:>7.2f}")
 
-    if regime["scalar"] == 0.0:
-        print("  ⚠  BEAR MARKET — recommend staying in cash this week.\n")
-    elif regime["scalar"] < 1.0:
-        print(f"  ⚠  Caution mode — only deploying {regime['scalar']:.0%} "
-              f"of budget (€{effective:.0f}).\n")
+    print(f"\n{'═' * 54}")
+    print(f"  STEP-BY-STEP INSTRUCTIONS")
+    print(f"{'═' * 54}\n")
 
-    # ── Register buys ─────────────────────────────────────────────────────────
-    print(f"  After buying, register each position:")
-    for _, row in all_picks.iterrows():
-        print(f"  python portfolio.py buy {row['ticker']} {per_pos:.0f} <price>")
-    print()
+    for i, row in picks.iterrows():
+        price = float(row["price"])
+        stop  = price * (1 - STOP_LOSS)
+        shares = per_pos / price
+        print(f"  {i+1}. Open Revolut → search '{row['ticker']}'")
+        print(f"     Buy €{per_pos:.0f}  (~{shares:.3f} shares at ${price:.2f})")
+        print(f"     Set stop-loss at ${stop:.2f}  (protects against big loss)")
+        print()
 
-
-def _next_weekday(days: int) -> str:
-    from datetime import timedelta
-    d = date.today()
-    added = 0
-    while added < days:
-        d += timedelta(days=1)
-        if d.weekday() < 5:
-            added += 1
-    return d.strftime("%A %d %b")
+    print(f"  ✅ Come back on {sell_on} and sell everything.")
+    print(f"  ✅ Then run  python main.py  again for next week's picks.\n")
+    print(f"{'═' * 54}\n")
 
 
 if __name__ == "__main__":
