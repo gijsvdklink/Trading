@@ -2,20 +2,12 @@
 __pycache__/
 *.pyc
 .venv/
-*.egg-info/
 
-# Environment — never commit secrets
+# Secrets
 .env
 
-# Large data files — too big for git
+# Large data files
 data/*.parquet
 data/t212_ticker_map.json
 
-# Logs
-logs/
-
-# Results/charts
-results/
-
-# portfolio_state.json is intentionally NOT ignored
-# It must be committed so GitHub Actions can read your positions
+# portfolio_state.json is tracked intentionally
